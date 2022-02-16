@@ -1,7 +1,4 @@
 package BasicApp;
-use strict;
-use warnings;
-
 use Mojo::Base 'Mojolicious', -signatures;
 
 sub startup ($self) {
