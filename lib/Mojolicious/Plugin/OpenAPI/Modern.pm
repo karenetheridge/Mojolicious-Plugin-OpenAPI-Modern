@@ -46,8 +46,8 @@ sub register ($self, $app, $config) {
     }
 
     my $openapi = OpenAPI::Modern->new(
-        openapi_uri    => $config->{document_filename} // '',
-        openapi_schema => $schema,
+      openapi_uri    => $config->{document_filename} // '',
+      openapi_schema => $schema,
     );
 
     # leave room for other keys in our localized stash
