@@ -16,7 +16,7 @@ use Mojo::Base 'Mojolicious::Plugin', -signatures;
 use Feature::Compat::Try;
 use YAML::PP;
 use Path::Tiny;
-use JSON::MaybeXS;
+use Mojo::JSON 'decode_json';
 use Safe::Isa;
 use OpenAPI::Modern 0.022;
 use namespace::clean;
@@ -34,8 +34,7 @@ sub register ($self, $app, $config) {
         $schema = YAML::PP->new(boolean => 'JSON::PP')->load_file($config->{document_filename}),
       }
       elsif ($config->{document_filename} =~ /\.json$/) {
-        $schema = JSON::MaybeXS->new(allow_nonref => 1, utf8 => 1)->decode(
-          path($config->{document_filename})->slurp_raw);
+        $schema = decode_json(path($config->{document_filename})->slurp_raw);
       }
       else {
         die 'Unsupported file format in filename: ', $config->{document_filename};
