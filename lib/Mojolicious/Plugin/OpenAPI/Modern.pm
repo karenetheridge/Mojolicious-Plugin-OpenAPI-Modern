@@ -54,10 +54,7 @@ sub register ($self, $app, $config) {
     $stash->{openapi} = $openapi;
   }
   catch ($e) {
-    die 'Cannot load OpenAPI document: ', $e if not $e->$_isa('JSON::Schema::Modern::Result');
-    my $encoder = JSON::MaybeXS->new(canonical => 1, pretty => 1, utf8 => 0);
-    $encoder->indent_length(2) if $encoder->can('indent_length');
-    die $encoder->encode($e->TO_JSON);
+    die 'Cannot load OpenAPI document: ', $e;
   }
 
   $app->helper(openapi => sub ($c) { $stash->{openapi} });
