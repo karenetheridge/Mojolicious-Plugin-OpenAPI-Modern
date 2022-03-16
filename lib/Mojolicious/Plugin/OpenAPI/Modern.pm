@@ -21,6 +21,11 @@ use Safe::Isa;
 use OpenAPI::Modern 0.022;
 use namespace::clean;
 
+# we store data in two places: on the app (persistent storage, for the OpenAPI::Modern object
+# itself) and in the controller stash: per-request data like the path info and extracted path items.
+
+# the first is $app->openapi or $c->openapi
+# the second is $c->stash('openapi') which will be initialized to {} on first use.
 sub register ($self, $app, $config) {
   my $stash = Mojo::Util::_stash(openapi => $app);
 
@@ -57,6 +62,13 @@ sub register ($self, $app, $config) {
   }
 
   $app->helper(openapi => sub ($c) { $stash->{openapi} });
+
+  $app->helper(validate_request => \&_validate_request);
+}
+
+sub _validate_request ($c) {
+  my $options = $c->stash->{openapi} //= {};
+  return $c->openapi->validate_request($c->req, $options);
 }
 
 1;
@@ -106,11 +118,44 @@ Instantiates an L<OpenAPI::Modern> object and provides an accessor to it.
 These methods are made available on the C<$c> object (the invocant of all controller methods,
 and therefore other helpers).
 
-=for stopwords openapi
+=for stopwords openapi operationId
 
 =head2 openapi
 
 The L<OpenAPI::Modern> object.
+
+=head2 validate_request
+
+  my $result = $c->openapi->validate_request;
+
+Passes C<< $c->req >> to L<OpenAPI::Modern/validate_request> and returns the
+L<JSON::Schema::Modern::Result>.
+
+Note that the matching L<Mojo::Routes::Route> object for this request is I<not> used to find the
+OpenAPI path-item that corresponds to this request: only information in the request URI itself is
+used (although some information in the route may be used in a future feature).
+
+=head1 STASH VALUES
+
+This plugin stores all its data under the C<openapi> hashref, e.g.:
+
+  my $operation_id = $c->stash->{openapi}{operation_id};
+
+Keys starting with underscore are for I<internal use only> and should not be relied upon to behave
+consistently across release versions. Values that may be used by controllers and templates are:
+
+=for :list
+* C<path_template>: Set by the first call to L</validate_request>.
+  A string representing the request URI, with placeholders in braces (e.g. C</pets/{petId}>); see
+  L<https://spec.openapis.org/oas/v3.1.0#paths-object>.
+* C<path_captures>: Set by the first call to L</validate_request>.
+  A hashref mapping placeholders in the path to their actual values in the request URI.
+* C<operation_id>: Set by the first call to L</validate_request>.
+  Contains the corresponding
+  L<operationId|https://swagger.io/docs/specification/paths-and-operations/#operationid> of the
+  current endpoint.
+* C<method>: Set by the first call to L</validate_request>.
+  The HTTP method used by the request, lower-cased.
 
 =head1 SEE ALSO
 
