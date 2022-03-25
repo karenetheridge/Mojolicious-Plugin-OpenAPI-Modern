@@ -10,6 +10,7 @@ no if "$]" >= 5.031009, feature => 'indirect';
 no if "$]" >= 5.033001, feature => 'multidimensional';
 no if "$]" >= 5.033006, feature => 'bareword_filehandles';
 use open ':std', ':encoding(UTF-8)'; # force stdin, stdout, stderr into utf8
+use Test::Deep;
 use Mojolicious::Plugin::OpenAPI::Modern;
 use Path::Tiny;
 use Test::Mojo;
@@ -80,12 +81,27 @@ paths:
           $ref: '#/components/responses/validation_response'
         400:
           $ref: '#/components/responses/validation_response'
+        500:
+          description: available upon request
+          content:
+            application/json:
+              schema: false
+  /skip_validate_request:
+    get:
+      operationId: operation_skip_validate_request
+      responses:
+        200:
+          description: request not validated
+          content:
+            text/plain:
+              schema:
+                false
 YAML
 
   $t->post_ok('/foo/hi/there')
     ->status_is(400, 'path_template cannot be found')
     ->json_is({
-      stash => {
+      stash => my $expected_stash = {
         method => 'post',
       },
       result => my $expected_result = {
@@ -101,10 +117,23 @@ YAML
       },
     });
 
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
+    $expected_stash,
+    'stash is set in validate_response',
+  );
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
+    $expected_result,
+    'validate_response attempts to parse the request URI again, producing the same result',
+  );
+
+
   $t->get_ok('/foo/hi')
     ->status_is(400, 'wrong HTTP method')
     ->json_is({
-      stash => {
+      stash => $expected_stash = {
         path_template => '/foo/{foo_id}',
         path_captures => { foo_id => 'hi' },
         method => 'get',
@@ -122,10 +151,23 @@ YAML
       },
     });
 
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
+    $expected_stash,
+    'stash is set in validate_response',
+  );
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
+    $expected_result,
+    'validate_response attempts to parse the request URI again, producing the same result',
+  );
+
+
   $t->post_ok('/foo/123')
     ->status_is(400, 'path parameter will fail validation')
     ->json_is({
-      stash => {
+      stash => $expected_stash = {
         method => 'post',
         operation_id => 'operation_foo',
         path_template => '/foo/{foo_id}',
@@ -143,6 +185,19 @@ YAML
         ],
       },
     });
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
+    $expected_stash,
+    'stash is set in validate_response',
+  );
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
+    { valid => true },
+    'validate_response ran successfully',
+  );
+
 
   $t->post_ok('/foo/hi', { 'Content-Type' => 'text/plain' }, '123')
     ->status_is(400, 'valid path; body does not match')
@@ -166,10 +221,11 @@ YAML
       },
     });
 
-  $t->post_ok('/foo/hi', { 'Content-Type' => 'text/plain' }, 'hi')
-    ->status_is(200, 'request is valid')
+
+  $t->post_ok('/foo/hi?status=500', { 'Content-Type' => 'text/plain' }, 'hi')
+    ->status_is(500, 'custom status code')
     ->json_is({
-      stash => {
+      stash => $expected_stash = {
         method => 'post',
         operation_id => 'operation_foo',
         path_template => '/foo/{foo_id}',
@@ -177,6 +233,60 @@ YAML
       },
       result => { valid => true },
     });
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
+    $expected_stash,
+    'stash is set in validate_response',
+  );
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
+    {
+      valid => false,
+      errors => [
+        {
+          instanceLocation => '/response/body',
+          keywordLocation => jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)),
+          absoluteKeywordLocation => $t->$abs_uri->fragment(jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)))->to_string,
+          error => 'subschema is false',
+        },
+      ],
+    },
+    'validate_response does not like error responses',
+  );
+
+
+  $t->get_ok('/skip_validate_request')
+    ->status_is(200)
+    ->content_is('ok');
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
+    {
+        method => 'get',
+        operation_id => 'operation_skip_validate_request',
+        path_template => '/skip_validate_request',
+        path_captures => {},
+    },
+    'stash is set in validate_response, even though validate_request never ran',
+  );
+
+  cmp_deeply(
+    $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
+    {
+      valid => false,
+      errors => [
+        {
+          instanceLocation => '/response/body',
+          keywordLocation => jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)),
+          absoluteKeywordLocation => $t->$abs_uri->fragment(jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)))->to_string,
+          error => 'subschema is false',
+        },
+      ],
+    },
+    'response from this endpoint never passes the specification',
+  );
 };
 
 done_testing;
