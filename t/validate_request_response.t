@@ -108,7 +108,7 @@ YAML
         errors => [
           {
             instanceLocation => '/request/uri/path',
-            keywordLocation => jsonp(qw(/paths)),
+            keywordLocation => '/paths',
             absoluteKeywordLocation => $t->$abs_uri->fragment('/paths')->to_string,
             error => 'no match found for URI path "/foo/hi/there"',
           },
