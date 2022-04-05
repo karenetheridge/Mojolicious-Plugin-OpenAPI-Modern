@@ -264,10 +264,10 @@ YAML
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     {
-        method => 'get',
-        operation_id => 'operation_skip_validate_request',
-        path_template => '/skip_validate_request',
-        path_captures => {},
+      method => 'get',
+      operation_id => 'operation_skip_validate_request',
+      path_template => '/skip_validate_request',
+      path_captures => {},
     },
     'stash is set in validate_response, even though validate_request never ran',
   );
