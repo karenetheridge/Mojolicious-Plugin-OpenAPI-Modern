@@ -18,7 +18,7 @@ use YAML::PP;
 use Path::Tiny;
 use Mojo::JSON 'decode_json';
 use Safe::Isa;
-use OpenAPI::Modern 0.022;
+use OpenAPI::Modern 0.037;
 use namespace::clean;
 
 # we store data in two places: on the app (persistent storage, for the OpenAPI::Modern object
