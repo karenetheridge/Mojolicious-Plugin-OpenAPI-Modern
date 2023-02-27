@@ -1,6 +1,7 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
 {{$NEXT}}
+          - fix test incompatibilities with OpenAPI::Modern 0.040
 
 0.004     2022-12-11 01:22:59Z
           - bump dependency on OpenAPI::Modern for new features and

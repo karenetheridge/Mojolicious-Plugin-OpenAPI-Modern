@@ -116,6 +116,7 @@ YAML
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     my $expected_stash = {
       method => 'post',
+      request => isa('Mojo::Message::Request'),
     },
     'stash is set in validate_request',
   );
@@ -155,6 +156,7 @@ YAML
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
       method => 'get',
+      request => isa('Mojo::Message::Request'),
     },
     'stash is set in validate_request',
   );
@@ -196,6 +198,7 @@ YAML
       operation_path => '/paths/~1foo~1{foo_id}/post',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => '123' },
+      request => isa('Mojo::Message::Request'),
     },
     'stash is set in validate_request',
   );
@@ -237,6 +240,7 @@ YAML
       operation_path => '/paths/~1foo~1{foo_id}/post',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
+      request => isa('Mojo::Message::Request'),
     },
     'stash is set in validate_request',
   );
@@ -255,6 +259,7 @@ YAML
       operation_path => '/paths/~1foo~1{foo_id}/post',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
+      request => isa('Mojo::Message::Request'),
     },
     'stash is set in validate_request',
   );
