@@ -1,5 +1,4 @@
-use strict;
-use warnings;
+use strictures 2;
 package Mojolicious::Plugin::OpenAPI::Modern;
 # vim: set ts=8 sts=2 sw=2 tw=100 et :
 # ABSTRACT: Mojolicious plugin providing access to an OpenAPI document and parser

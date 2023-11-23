@@ -1,3 +1,4 @@
+use strictures 2;
 package BasicApp;
 use Mojo::Base 'Mojolicious', -signatures;
 
