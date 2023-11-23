@@ -112,6 +112,7 @@ L<OpenAPI::Modern/openapi_schema>.
 =head2 document_filename
 
 A filename indicating from where to load the OpenAPI document. Supports YAML and json file formats.
+Only used if L</schema> is not provided.
 
 =head1 METHODS
 
@@ -128,32 +129,36 @@ and therefore other helpers).
 
 =head2 openapi
 
-The L<OpenAPI::Modern> object.
+The L<OpenAPI::Modern> object; it holds your OpenAPI specification and is reused between requests.
 
 =head2 validate_request
 
   my $result = $c->openapi->validate_request;
 
-Passes C<< $c->req >> to L<OpenAPI::Modern/validate_request> and returns the
-L<JSON::Schema::Modern::Result>.
+Passes C<< $c->req >> to L<OpenAPI::Modern/validate_request> and returns a
+L<JSON::Schema::Modern::Result> object.
 
 Note that the matching L<Mojo::Routes::Route> object for this request is I<not> used to find the
 OpenAPI path-item that corresponds to this request: only information in the request URI itself is
-used (although some information in the route may be used in a future feature).
+used (although some information in the route may be used in future features).
+
+You might want to define an C<under> route action that calls C<validate_request> and short-circuits
+with an HTTP 400 response on validation failure.
 
 =head2 validate_response
 
   my $result = $c->openapi->validate_response;
 
-Passes C<< $c->res >> and C<< $c->req >> to L<OpenAPI::Modern/validate_response> and returns the
-L<JSON::Schema::Modern::Result>.
+Passes C<< $c->res >> and C<< $c->req >> to L<OpenAPI::Modern/validate_response> and returns a
+L<JSON::Schema::Modern::Result> object.
 
 Can only be called in the areas of the dispatch flow where the response has already been rendered; a
-good place to call this would be in an L<after_dispatch|Mojolicious/after_dispatch> hook.
+good place to call this would be in an L<after_dispatch|Mojolicious/after_dispatch> hook (a future
+feature may provide a mechanism for this to happen automatically).
 
 Note that the matching L<Mojo::Routes::Route> object for this request is I<not> used to find the
 OpenAPI path-item that corresponds to this request and response: only information in the request URI
-itself is used (although some information in the route may be used in a future feature).
+itself is used (although some information in the route may be used in future features).
 
 =head1 STASH VALUES
 
@@ -190,7 +195,7 @@ consistently across release versions. Values that may be used by controllers and
 
 =head1 SUPPORT
 
-You can also find me on the L<JSON Schema Slack server|https://json-schema.slack.com> and L<OpenAPI Slack
-server|https://open-api.slack.com>, which are also great resources for finding help.
+You can also find me on the L<JSON Schema Slack server|https://json-schema.slack.com> and
+L<OpenAPI Slack server|https://open-api.slack.com>, which are also great resources for finding help.
 
 =cut
