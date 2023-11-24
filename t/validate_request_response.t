@@ -14,6 +14,7 @@ use Test::Deep;
 use Mojolicious::Plugin::OpenAPI::Modern;
 use Path::Tiny;
 use Test::Mojo;
+use Test::Memory::Cycle;
 use constant { true => JSON::PP::true, false => JSON::PP::false };
 use JSON::Schema::Modern::Utilities 'jsonp';
 
@@ -81,7 +82,7 @@ paths:
         400:
           $ref: '#/components/responses/validation_response'
         500:
-          description: available upon request
+          description: this response code is produced via ?status=500 in the request
           content:
             application/json:
               schema: false
@@ -90,7 +91,7 @@ paths:
       operationId: operation_skip_validate_request
       responses:
         200:
-          description: request not validated
+          description: request not validated; response body not permitted
           content:
             text/plain:
               schema:
@@ -112,6 +113,8 @@ YAML
         ],
       },
     });
+
+  memory_cycle_ok($t->app);
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
@@ -150,6 +153,8 @@ YAML
         ],
       },
     });
+
+  memory_cycle_ok($t->app);
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
@@ -190,6 +195,8 @@ YAML
         ],
       },
     });
+
+  memory_cycle_ok($t->app);
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
@@ -233,6 +240,8 @@ YAML
       },
     });
 
+  memory_cycle_ok($t->app);
+
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     {
@@ -251,6 +260,8 @@ YAML
     ->json_is({
       result => { valid => true },
     });
+
+  memory_cycle_ok($t->app);
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
@@ -291,6 +302,8 @@ YAML
   $t->get_ok('/skip_validate_request')
     ->status_is(200)
     ->content_is('ok');
+
+  memory_cycle_ok($t->app);
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
