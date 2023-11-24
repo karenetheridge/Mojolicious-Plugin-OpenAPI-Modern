@@ -64,6 +64,10 @@ sub register ($self, $app, $config) {
 
   $app->helper(validate_request => \&_validate_request);
   $app->helper(validate_response => \&_validate_response);
+
+  $app->hook(after_dispatch => sub ($c) {
+    $c->res->on(finish => sub ($res) { $config->{after_response}->($c) });
+  }) if $config->{after_response};
 }
 
 sub _validate_request ($c) {
@@ -82,11 +86,14 @@ __END__
 
 =pod
 
+=for stopwords openapi operationId subref
+
 =head1 SYNOPSIS
 
   $app->config({
     openapi => {
       document_filename => 'data/openapi.yaml',
+      after_response => sub ($c) { ... },
     },
     ...
   });
@@ -114,6 +121,23 @@ L<OpenAPI::Modern/openapi_schema>.
 A filename indicating from where to load the OpenAPI document. Supports YAML and json file formats.
 Only used if L</schema> is not provided.
 
+=head2 after_response
+
+A subref which runs after the response has been finalized, to allow you to perform validation on it.
+You B<must not> mutate the response here, nor swap it out for a different response, so use this only
+for telemetry and logging.
+
+  my $after_response = sub ($c) {
+    my $result = $c->validate_response;
+    if ($result) {
+      $c->log->debug('response is valid');
+    }
+    else {
+      # see JSON::Schema::Modern::Result for different output formats
+      $c->log->error("response is invalid:\n", $result);
+    }
+  };
+
 =head1 METHODS
 
 =head2 register
@@ -124,8 +148,6 @@ Instantiates an L<OpenAPI::Modern> object and provides an accessor to it.
 
 These methods are made available on the C<$c> object (the invocant of all controller methods,
 and therefore other helpers).
-
-=for stopwords openapi operationId
 
 =head2 openapi
 
@@ -152,9 +174,14 @@ with an HTTP 400 response on validation failure.
 Passes C<< $c->res >> and C<< $c->req >> to L<OpenAPI::Modern/validate_response> and returns a
 L<JSON::Schema::Modern::Result> object.
 
-Can only be called in the areas of the dispatch flow where the response has already been rendered; a
-good place to call this would be in an L<after_dispatch|Mojolicious/after_dispatch> hook (a future
-feature may provide a mechanism for this to happen automatically).
+As this can only be called in the parts of the dispatch flow where the response has already been
+rendered and finalized, a hook has been set up for you; you can access it by providing a subref to the
+L</after_response> configuration value:
+
+  $app->config->{openapi}{after_response} //= sub ($c) {
+    my $result = $c->validate_response;
+    # ... do something with the validation result
+  };
 
 Note that the matching L<Mojo::Routes::Route> object for this request is I<not> used to find the
 OpenAPI path-item that corresponds to this request and response: only information in the request URI

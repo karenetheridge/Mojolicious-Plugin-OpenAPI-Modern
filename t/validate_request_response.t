@@ -18,6 +18,16 @@ use Test::Memory::Cycle;
 use constant { true => JSON::PP::true, false => JSON::PP::false };
 use JSON::Schema::Modern::Utilities 'jsonp';
 
+# TODO: instead, Test::Warnings::allow_warnings(qr/^Unhandled type: REGEXP at /);
+BEGIN {
+  my $old_handler = $SIG{__WARN__}; # the Test::Warnings hook, and maybe also Devel::Confess
+  $SIG{__WARN__} = sub {
+    return if $_[0] =~ /^Unhandled type: REGEXP at /;  # a regex in our route definition
+    warn @_;
+    $old_handler->(@_) if $old_handler;
+  };
+}
+
 use lib 't/lib';
 
 my $openapi_preamble = {
