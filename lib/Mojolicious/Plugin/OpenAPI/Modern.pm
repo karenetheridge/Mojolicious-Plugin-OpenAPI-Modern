@@ -29,29 +29,7 @@ sub register ($self, $app, $config) {
   my $stash = Mojo::Util::_stash(openapi => $app);
 
   try {
-    my $schema;
-    if (exists $config->{schema}) {
-      $schema = $config->{schema};
-    }
-    elsif (exists $config->{document_filename}) {
-      if ($config->{document_filename} =~ /\.ya?ml$/) {
-        $schema = YAML::PP->new(boolean => 'JSON::PP')->load_file($config->{document_filename}),
-      }
-      elsif ($config->{document_filename} =~ /\.json$/) {
-        $schema = decode_json(path($config->{document_filename})->slurp_raw);
-      }
-      else {
-        die 'Unsupported file format in filename: ', $config->{document_filename};
-      }
-    }
-    else {
-      die 'missing config: one of schema, filename';
-    }
-
-    my $openapi = OpenAPI::Modern->new(
-      openapi_uri    => $config->{document_filename} // '',
-      openapi_schema => $schema,
-    );
+    my $openapi = OpenAPI::Modern->new_process_configs($config));
 
     # leave room for other keys in our localized stash
     $stash->{openapi} = $openapi;
@@ -68,6 +46,33 @@ sub register ($self, $app, $config) {
   $app->hook(after_dispatch => sub ($c) {
     $c->res->on(finish => sub ($res) { $config->{after_response}->($c) });
   }) if $config->{after_response};
+}
+
+# converts a config hash into values suitable for constructing an OpenAPI::Modern object
+sub _process_configs ($config) {
+  my $schema;
+  if (exists $config->{schema}) {
+    $schema = $config->{schema};
+  }
+  elsif (exists $config->{document_filename}) {
+    if ($config->{document_filename} =~ /\.ya?ml$/) {
+      $schema = YAML::PP->new(boolean => 'JSON::PP')->load_file($config->{document_filename}),
+    }
+    elsif ($config->{document_filename} =~ /\.json$/) {
+      $schema = decode_json(path($config->{document_filename})->slurp_raw);
+    }
+    else {
+      die 'Unsupported file format in filename: ', $config->{document_filename};
+    }
+  }
+  else {
+    die 'missing config: one of schema, filename';
+  }
+
+  return {
+    openapi_uri    => $config->{document_filename} // '',
+    openapi_schema => $schema,
+  };
 }
 
 sub _validate_request ($c) {
