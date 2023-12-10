@@ -8,7 +8,7 @@ Mojolicious::Plugin::OpenAPI::Modern - Mojolicious plugin providing access to an
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
 
@@ -38,12 +38,18 @@ There are many features to come.
 =head2 schema
 
 The literal, unblessed Perl data structure containing the OpenAPI document. See
-L<OpenAPI::Modern/openapi_schema>.
+L<OpenAPI::Modern/openapi_schema>; passed to the L<OpenAPI::Modern> constructor.
+Only used if L</openapi_obj> is not provided.
 
 =head2 document_filename
 
 A filename indicating from where to load the OpenAPI document. Supports YAML and json file formats.
-Only used if L</schema> is not provided.
+Only used if L</schema> is not provided; also passed to the L<OpenAPI::Modern> constructor as
+C<openapi_uri>. Only used if L</openapi_obj> is not provided.
+
+=head2 openapi_obj
+
+An L<OpenAPI::Modern> object to use
 
 =head2 after_response
 
@@ -166,7 +172,7 @@ L<https://www.openapis.org/>
 
 =item *
 
-L<https://oai.github.io/Documentation/>
+L<https://learn.openapis.org/>
 
 =item *
 
