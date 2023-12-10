@@ -119,12 +119,13 @@ There are many features to come.
 =head2 schema
 
 The literal, unblessed Perl data structure containing the OpenAPI document. See
-L<OpenAPI::Modern/openapi_schema>.
+L<OpenAPI::Modern/openapi_schema>; passed to the L<OpenAPI::Modern> constructor.
 
 =head2 document_filename
 
 A filename indicating from where to load the OpenAPI document. Supports YAML and json file formats.
-Only used if L</schema> is not provided.
+Only used if L</schema> is not provided; also passed to the L<OpenAPI::Modern> constructor as
+C<openapi_uri>.
 
 =head2 after_response
 
