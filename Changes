@@ -1,5 +1,7 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
+{{$NEXT}}
+
 0.007     2023-12-10 06:12:33Z
           - new config option "openapi_obj", for providing the OpenAPI::Modern
             object to use instead of constructing a new one.
