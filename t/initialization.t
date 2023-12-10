@@ -82,4 +82,26 @@ JSON
     'access schema through OM object');
 };
 
+subtest 'override with our own object' => sub {
+  my $openapi = OpenAPI::Modern->new(
+    openapi_uri    => '',
+    openapi_schema => {
+      openapi => '3.1.0',
+      info => {
+        title => 'Test API with our own object',
+        version => '1.2.3',
+      },
+      paths => {},
+    },
+  );
+
+  my $t = Test::Mojo->new(
+    'BasicApp',
+    { openapi => { openapi_obj => $openapi } },
+  );
+
+  is($t->app->openapi->document_get('/info/title'), 'Test API with our own object',
+    'plugin uses a pre-constructed OpenAPI::Modern object');
+};
+
 done_testing;

@@ -29,7 +29,7 @@ sub register ($self, $app, $config) {
   my $stash = Mojo::Util::_stash(openapi => $app);
 
   try {
-    my $openapi = OpenAPI::Modern->new_process_configs($config));
+    my $openapi = $config->{openapi_obj} // OpenAPI::Modern->new(_process_configs($config));
 
     # leave room for other keys in our localized stash
     $stash->{openapi} = $openapi;
@@ -120,12 +120,17 @@ There are many features to come.
 
 The literal, unblessed Perl data structure containing the OpenAPI document. See
 L<OpenAPI::Modern/openapi_schema>; passed to the L<OpenAPI::Modern> constructor.
+Only used if L</openapi_obj> is not provided.
 
 =head2 document_filename
 
 A filename indicating from where to load the OpenAPI document. Supports YAML and json file formats.
 Only used if L</schema> is not provided; also passed to the L<OpenAPI::Modern> constructor as
-C<openapi_uri>.
+C<openapi_uri>. Only used if L</openapi_obj> is not provided.
+
+=head2 openapi_obj
+
+An L<OpenAPI::Modern> object to use
 
 =head2 after_response
 

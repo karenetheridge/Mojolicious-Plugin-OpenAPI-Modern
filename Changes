@@ -1,6 +1,8 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
 {{$NEXT}}
+          - new config option "openapi_obj", for providing the OpenAPI::Modern
+            object to use instead of constructing a new one.
 
 0.006     2023-11-24 01:27:44Z
           - new config option "after_response", for providing a subref for
