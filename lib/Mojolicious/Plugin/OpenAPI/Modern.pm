@@ -60,7 +60,7 @@ sub register ($self, $app, $config) {
     die 'Cannot load OpenAPI document: ', $e;
   }
 
-  $app->helper(openapi => sub ($c) { $stash->{openapi} });
+  $app->helper(openapi => sub ($) { $stash->{openapi} });
 
   $app->helper(validate_request => \&_validate_request);
   $app->helper(validate_response => \&_validate_response);
