@@ -1,6 +1,7 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
 {{$NEXT}}
+          - fix prerequisite declaration to allow tests to pass
 
 0.007     2023-12-10 06:12:33Z
           - new config option "openapi_obj", for providing the OpenAPI::Modern
