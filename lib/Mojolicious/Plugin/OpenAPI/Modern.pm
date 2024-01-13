@@ -224,6 +224,7 @@ consistently across release versions. Values that may be used by controllers and
 
 =for :list
 * L<OpenAPI::Modern>
+* L<Test::Mojo::Role::OpenAPI::Modern>
 * L<JSON::Schema::Modern::Document::OpenAPI>
 * L<JSON::Schema::Modern>
 * L<https://json-schema.org>
