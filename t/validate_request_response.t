@@ -2,7 +2,7 @@
 use strictures 2;
 use 5.020;
 use Test::More 0.88;
-use if $ENV{AUTHOR_TESTING}, 'Test::Warnings';
+use Test::Warnings 0.033 qw(:no_end_test had_no_warnings allow_patterns);
 use stable 0.031 'postderef';
 use experimental 'signatures';
 use if "$]" >= 5.022, experimental => 're_strict';
@@ -18,15 +18,8 @@ use Test::Memory::Cycle;
 use constant { true => JSON::PP::true, false => JSON::PP::false };
 use JSON::Schema::Modern::Utilities 'jsonp';
 
-# TODO: instead, Test::Warnings::allow_warnings(qr/^Unhandled type: REGEXP at /);
-BEGIN {
-  my $old_handler = $SIG{__WARN__}; # the Test::Warnings hook, and maybe also Devel::Confess
-  $SIG{__WARN__} = sub {
-    return if $_[0] =~ /^Unhandled type: REGEXP at /;  # a regex in our route definition
-    warn @_;
-    $old_handler->(@_) if $old_handler;
-  };
-}
+# this comes from Test::Memory::Cycle, when looking at Mojo::Routes
+allow_patterns(qr{^Unhandled type: REGEXP at .*/Devel/Cycle.pm});
 
 use lib 't/lib';
 
@@ -350,4 +343,5 @@ YAML
   );
 };
 
+had_no_warnings() if $ENV{AUTHOR_TESTING};
 done_testing;
