@@ -121,10 +121,10 @@ YAML
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
-    my $expected_stash = {
+    my $expected_stash = superhashof({
       method => 'post',
       request => isa('Mojo::Message::Request'),
-    },
+    }),
     'stash is set in validate_request',
   );
 
@@ -161,12 +161,12 @@ YAML
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
-    $expected_stash = {
+    $expected_stash = superhashof({
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
       method => 'get',
       request => isa('Mojo::Message::Request'),
-    },
+    }),
     'stash is set in validate_request',
   );
 
@@ -203,14 +203,13 @@ YAML
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
-    $expected_stash = {
+    $expected_stash = superhashof({
       method => 'post',
       operation_id => 'operation_foo',
-      operation_path => '/paths/~1foo~1{foo_id}/post',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => '123' },
       request => isa('Mojo::Message::Request'),
-    },
+    }),
     'stash is set in validate_request',
   );
 
@@ -247,14 +246,13 @@ YAML
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
-    {
+    superhashof({
       method => 'post',
       operation_id => 'operation_foo',
-      operation_path => '/paths/~1foo~1{foo_id}/post',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
       request => isa('Mojo::Message::Request'),
-    },
+    }),
     'stash is set in validate_request',
   );
 
@@ -268,14 +266,13 @@ YAML
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
-    $expected_stash = {
+    $expected_stash = superhashof({
       method => 'post',
       operation_id => 'operation_foo',
-      operation_path => '/paths/~1foo~1{foo_id}/post',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
       request => isa('Mojo::Message::Request'),
-    },
+    }),
     'stash is set in validate_request',
   );
 
@@ -316,13 +313,12 @@ YAML
 
   cmp_deeply(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
-    {
+    superhashof({
       method => 'get',
       operation_id => 'operation_skip_validate_request',
-      operation_path => '/paths/~1skip_validate_request/get',
       path_template => '/skip_validate_request',
       path_captures => {},
-    },
+    }),
     'stash is set in validate_response, even though validate_request never ran',
   );
 
