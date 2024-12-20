@@ -4,7 +4,7 @@ package Mojolicious::Plugin::OpenAPI::Modern;
 # ABSTRACT: Mojolicious plugin providing access to an OpenAPI document and parser
 # KEYWORDS: validation evaluation JSON Schema OpenAPI Swagger HTTP request response
 
-our $VERSION = '0.013';
+our $VERSION = '0.014';
 
 use 5.020;
 use if "$]" >= 5.022, experimental => 're_strict';
