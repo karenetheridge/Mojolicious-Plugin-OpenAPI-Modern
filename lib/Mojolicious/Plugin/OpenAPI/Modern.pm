@@ -230,7 +230,7 @@ consistently across release versions. Values that may be used by controllers and
 * L<https://json-schema.org>
 * L<https://www.openapis.org/>
 * L<https://learn.openapis.org/>
-* L<https://spec.openapis.org/oas/v3.1.0>
+* L<https://spec.openapis.org/oas/latest.html>
 
 =head1 SUPPORT
 
