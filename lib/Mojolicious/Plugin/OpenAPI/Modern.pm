@@ -140,7 +140,7 @@ for telemetry and logging.
 
   my $after_response = sub ($c) {
     my $result = $c->validate_response;
-    if ($result) {
+    if ($result->valid) {
       $c->log->debug('response is valid');
     }
     else {
