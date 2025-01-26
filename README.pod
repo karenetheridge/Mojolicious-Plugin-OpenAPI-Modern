@@ -8,7 +8,7 @@ Mojolicious::Plugin::OpenAPI::Modern - Mojolicious plugin providing access to an
 
 =head1 VERSION
 
-version 0.013
+version 0.014
 
 =head1 SYNOPSIS
 
@@ -59,7 +59,7 @@ for telemetry and logging.
 
   my $after_response = sub ($c) {
     my $result = $c->validate_response;
-    if ($result) {
+    if ($result->valid) {
       $c->log->debug('response is valid');
     }
     else {
@@ -180,7 +180,7 @@ L<https://learn.openapis.org/>
 
 =item *
 
-L<https://spec.openapis.org/oas/v3.1.0>
+L<https://spec.openapis.org/oas/latest.html>
 
 =back
 

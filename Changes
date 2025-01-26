@@ -1,6 +1,6 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
-{{$NEXT}}
+0.014     2025-01-26 20:26:39Z
           - fix usage of JSON::Schema::Modern::Result objects, in preparation
             for an upcoming deprecation of boolean overloads
 
