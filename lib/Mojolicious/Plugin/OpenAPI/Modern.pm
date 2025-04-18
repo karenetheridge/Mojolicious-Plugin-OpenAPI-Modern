@@ -107,6 +107,23 @@ __END__
     ...
   });
 
+  # or:
+
+  $app->config({
+    openapi => {
+      document_uri => 'https://example.com/api/main.json',
+      schema => {
+        openapi => '3.1.1',
+        info => {
+          title => 'Test API with raw schema',
+          version => '1.2.3',
+        },
+        ...
+      },
+    },
+    ...
+  });
+
   $app->plugin('OpenAPI::Modern', $app->config->{openapi});
 
   # in a controller...
@@ -142,7 +159,7 @@ A filename indicating from where to load the OpenAPI document. Supports YAML and
 Only used if L</schema> is not provided; this value will also be used as the L</document_uri> if one
 was not explicitly provided.
 
-Only used if L</openapi_obj> is not provided.
+Only used if neither L</schema> nor L</openapi_obj> provided.
 
 =head2 openapi_obj
 
