@@ -1,6 +1,6 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
-{{$NEXT}}
+0.016     2025-06-03 20:53:06Z
           - fix a version dependency to avoid a deprecation warning
 
 0.015     2025-04-17 18:56:32Z
