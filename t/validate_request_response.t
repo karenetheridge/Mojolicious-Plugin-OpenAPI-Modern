@@ -24,6 +24,7 @@ use JSON::Schema::Modern::Utilities 'jsonp';
 allow_patterns(qr{^Unhandled type: REGEXP at .*/Devel/Cycle.pm});
 
 use lib 't/lib';
+use Helper;
 
 my $openapi_preamble = {
   openapi => '3.1.0',
@@ -120,7 +121,8 @@ YAML
 
   memory_cycle_ok($t->app);
 
-  cmp_deeply(
+
+  cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     my $expected_stash = superhashof({
       method => 'post',
@@ -129,13 +131,13 @@ YAML
     'stash is set in validate_request',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     $expected_stash,
     'stash is set in validate_response',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
     $expected_result,
     'validate_response attempts to parse the request URI again, producing the same result',
@@ -160,7 +162,7 @@ YAML
 
   memory_cycle_ok($t->app);
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
       path_template => '/foo/{foo_id}',
@@ -170,13 +172,13 @@ YAML
     'stash is set in validate_request',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     $expected_stash,
     'stash is set in validate_response',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
     $expected_result,
     'validate_response attempts to parse the request URI again, producing the same result',
@@ -201,7 +203,7 @@ YAML
 
   memory_cycle_ok($t->app);
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
       method => 'post',
@@ -212,13 +214,13 @@ YAML
     'stash is set in validate_request',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     $expected_stash,
     'stash is set in validate_response',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
     { valid => true },
     'validate_response ran successfully',
@@ -243,7 +245,7 @@ YAML
 
   memory_cycle_ok($t->app);
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     superhashof({
       method => 'post',
@@ -263,7 +265,7 @@ YAML
 
   memory_cycle_ok($t->app);
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
       method => 'post',
@@ -275,13 +277,13 @@ YAML
     'stash is set in validate_request',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     $expected_stash,
     'stash is set in validate_response',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
     {
       valid => false,
@@ -304,13 +306,13 @@ YAML
 
   memory_cycle_ok($t->app);
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     undef,
     'stash was not set in validate_request',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     superhashof({
       method => 'get',
@@ -321,7 +323,7 @@ YAML
     'stash is set in validate_response, even though validate_request never ran',
   );
 
-  cmp_deeply(
+  cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_RESULT->TO_JSON,
     {
       valid => false,
