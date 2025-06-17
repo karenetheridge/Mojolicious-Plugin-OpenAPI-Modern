@@ -31,6 +31,10 @@ my $encoder = JSON::Schema::Modern::_JSON_BACKEND()->new
   ->pretty(1)
   ->indent_length(2);
 
+*UNIVERSAL::TO_JSON = sub ($obj) { $obj.'' };
+*Mojo::Message::Request::TO_JSON = sub ($obj) { $obj->to_string };
+*Mojo::Message::Response::TO_JSON = sub ($obj) { $obj->to_string };
+
 # deep comparison, with Test::Deep syntax sugar
 sub cmp_result ($got, $expected, $test_name) {
   context_do {

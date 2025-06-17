@@ -34,14 +34,14 @@ my $openapi_preamble = {
   },
 };
 
-my $doc_uri = Mojo::URL->new('http://example.com/api');
+my $doc_uri_rel = Mojo::URL->new('/api');
 
 subtest 'validate_request helper' => sub {
   my $t = Test::Mojo->new(
     'BasicApp',
     {
       openapi => {
-        document_uri => $doc_uri,
+        document_uri => $doc_uri_rel,
         schema => YAML::PP->new(boolean => 'JSON::PP')->load_string(<<'YAML')} });
 openapi: 3.1.1
 info:
@@ -110,10 +110,10 @@ YAML
         valid => false,
         errors => [
           {
-            instanceLocation => '/request/uri/path',
+            instanceLocation => '/request',
             keywordLocation => '/paths',
-            absoluteKeywordLocation => $doc_uri->clone->fragment('/paths')->to_string,
-            error => 'no match found for request URI "/foo/hi/there"',
+            absoluteKeywordLocation => $doc_uri_rel->clone->fragment('/paths')->to_string,
+            error => 'no match found for request POST "/foo/hi/there"',
           },
         ],
       },
@@ -151,10 +151,10 @@ YAML
         valid => false,
         errors => [
           {
-            instanceLocation => '/request/method',
-            keywordLocation => jsonp(qw(/paths /foo/{foo_id})),
-            absoluteKeywordLocation => $doc_uri->clone->fragment(jsonp(qw(/paths /foo/{foo_id})))->to_string,
-            error => 'missing operation for HTTP method "get"',
+            instanceLocation => '/request',
+            keywordLocation => '/paths',
+            absoluteKeywordLocation => $doc_uri_rel->clone->fragment('/paths')->to_string,
+            error => 'no match found for request GET "/foo/hi"',
           },
         ],
       },
@@ -165,7 +165,6 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
-      path_template => '/foo/{foo_id}',
       method => 'get',
       request => isa('Mojo::Message::Request'),
     }),
@@ -194,7 +193,7 @@ YAML
           {
             instanceLocation => '/request/uri/path/foo_id',
             keywordLocation => jsonp(qw(/paths /foo/{foo_id} parameters 0 schema pattern)),
-            absoluteKeywordLocation => $doc_uri->clone->fragment(jsonp(qw(/paths /foo/{foo_id} parameters 0 schema pattern))),
+            absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /foo/{foo_id} parameters 0 schema pattern))),
             error => 'pattern does not match',
           },
         ],
@@ -236,7 +235,7 @@ YAML
           {
             instanceLocation => '/request/body',
             keywordLocation => jsonp(qw(/paths /foo/{foo_id} post requestBody content text/plain schema pattern)),
-            absoluteKeywordLocation => $doc_uri->clone->fragment(jsonp(qw(/paths /foo/{foo_id} post requestBody content text/plain schema pattern))),
+            absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /foo/{foo_id} post requestBody content text/plain schema pattern))),
             error => 'pattern does not match',
           },
         ],
@@ -291,7 +290,7 @@ YAML
         {
           instanceLocation => '/response/body',
           keywordLocation => jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)),
-          absoluteKeywordLocation => $doc_uri->clone->fragment(jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)))->to_string,
+          absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)))->to_string,
           error => 'response body not permitted',
         },
       ],
@@ -331,7 +330,7 @@ YAML
         {
           instanceLocation => '/response/body',
           keywordLocation => jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)),
-          absoluteKeywordLocation => $doc_uri->clone->fragment(jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)))->to_string,
+          absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)))->to_string,
           error => 'response body not permitted',
         },
       ],
