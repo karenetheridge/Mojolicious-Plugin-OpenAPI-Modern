@@ -152,7 +152,11 @@ Only used if L</openapi_obj> is not provided.
 A uri (string or Mojo::URL object) which identifies the OpenAPI document, and is used for resolving
 any relative URIs within the document (as well as locations in any error objects from validation).
 Note: as of OpenAPI 3.2, you can also set this value within the document itself, using the C<$self>
-keyword.
+keyword. This is passed as C<openapi_uri> to the L<OpenAPI::Modern> constructor.
+
+Note that in tests, you should use a relative URI, otherwise request URIs will not match. This is
+because L<Test::Mojo> uses a randomly-generated port for test requests, which cannot be predicted in
+advance to be included in C<openapi_uri>.
 
 Only used if L</openapi_obj> is not provided.
 
