@@ -17,7 +17,6 @@ use Mojolicious::Plugin::OpenAPI::Modern;
 use Path::Tiny;
 use Test::Mojo;
 use Test::Memory::Cycle;
-use constant { true => JSON::PP::true, false => JSON::PP::false };
 use JSON::Schema::Modern::Utilities 'jsonp';
 
 # this comes from Test::Memory::Cycle, when looking at Mojo::Routes
