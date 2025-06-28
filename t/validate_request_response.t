@@ -124,7 +124,7 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     my $expected_stash = superhashof({
-      method => 'post',
+      method => 'POST',
       request => isa('Mojo::Message::Request'),
     }),
     'stash is set in validate_request',
@@ -164,7 +164,7 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
-      method => 'get',
+      method => 'GET',
       request => isa('Mojo::Message::Request'),
     }),
     'stash is set in validate_request',
@@ -204,7 +204,7 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
-      method => 'post',
+      method => 'POST',
       operation_id => 'operation_foo',
       path_template => '/foo/{foo_id}',
       request => isa('Mojo::Message::Request'),
@@ -246,7 +246,7 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     superhashof({
-      method => 'post',
+      method => 'POST',
       operation_id => 'operation_foo',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
@@ -266,7 +266,7 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_REQUEST_STASH,
     $expected_stash = superhashof({
-      method => 'post',
+      method => 'POST',
       operation_id => 'operation_foo',
       path_template => '/foo/{foo_id}',
       path_captures => { foo_id => 'hi' },
@@ -313,7 +313,7 @@ YAML
   cmp_result(
     $BasicApp::LAST_VALIDATE_RESPONSE_STASH,
     superhashof({
-      method => 'get',
+      method => 'GET',
       operation_id => 'operation_skip_validate_request',
       path_template => '/skip_validate_request',
       path_captures => {},
