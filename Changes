@@ -2,6 +2,8 @@ Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
 {{$NEXT}}
           - update tests for error changes in OpenAPI::Modern 0.098
+          - update tests and examples to use OpenAPI v3.2.0, from
+            OpenAPI::Modern 0.100
 
 0.018     2025-09-23 21:01:09Z
           - update tests for case sensitivity changes in OpenAPI::Modern 0.096

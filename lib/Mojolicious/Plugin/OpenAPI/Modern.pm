@@ -20,7 +20,7 @@ use YAML::PP;
 use Path::Tiny;
 use Mojo::JSON 'decode_json';
 use Safe::Isa;
-use OpenAPI::Modern 0.096;
+use OpenAPI::Modern 0.100;
 use namespace::clean;
 
 # we store data in two places: on the app (persistent storage, for the OpenAPI::Modern object
@@ -116,7 +116,7 @@ __END__
     openapi => {
       document_uri => 'https://example.com/api/main.json',
       schema => {
-        openapi => '3.1.1',
+        openapi => '3.2.0',
         info => {
           title => 'Test API with raw schema',
           version => '1.2.3',
@@ -250,7 +250,7 @@ consistently across release versions. Values that may be used by controllers and
 =for :list
 * C<path_template>: Set by the first call to L</validate_request> or L</validate_response>.
   A string representing the request URI, with placeholders in braces (e.g. C</pets/{petId}>); see
-  L<https://spec.openapis.org/oas/v3.1.0#paths-object>.
+  L<https://spec.openapis.org/oas/latest#paths-object>.
 * C<path_captures>: Set by the first call to L</validate_request> or L</validate_response>.
   A hashref mapping placeholders in the path to their actual values in the request URI.
 * C<operation_id>: Set by the first call to L</validate_request> or L</validate_response>.
