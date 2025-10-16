@@ -240,25 +240,25 @@ itself is used (although some information in the route may be used in future fea
 
 =head1 STASH VALUES
 
-This plugin stores all its data under the C<openapi> hashref, e.g.:
+This plugin stores all its data under the C<openapi> hashref for use by controllers and templates,
+e.g.:
 
   my $operation_id = $c->stash->{openapi}{operation_id};
 
-Keys starting with underscore are for I<internal use only> and should not be relied upon to behave
-consistently across release versions. Values that may be used by controllers and templates are:
+Note: keys starting with underscore are for I<internal use only> and should not be relied upon to
+behave consistently across release versions.
+
+See the documentation for L<OpenAPI::Modern/find_path_item> for the full description of these
+values:
 
 =for :list
-* C<path_template>: Set by the first call to L</validate_request> or L</validate_response>.
-  A string representing the request URI, with placeholders in braces (e.g. C</pets/{petId}>); see
-  L<https://spec.openapis.org/oas/latest#paths-object>.
-* C<path_captures>: Set by the first call to L</validate_request> or L</validate_response>.
-  A hashref mapping placeholders in the path to their actual values in the request URI.
-* C<operation_id>: Set by the first call to L</validate_request> or L</validate_response>.
-  Contains the corresponding
-  L<operationId|https://swagger.io/docs/specification/paths-and-operations/#operationid> of the
-  current endpoint.
-* C<method>: Set by the first call to L</validate_request> or L</validate_response>.
-  The HTTP method used by the request, lower-cased.
+* C<path_template>
+* C<path_captures>
+* C<operation_id>
+* C<uri>
+* C<method>
+* C<uri_captures>
+* C<operation_uri>
 
 =head1 SEE ALSO
 
