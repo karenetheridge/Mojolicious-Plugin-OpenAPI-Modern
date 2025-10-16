@@ -8,7 +8,7 @@ Mojolicious::Plugin::OpenAPI::Modern - Mojolicious plugin providing access to an
 
 =head1 VERSION
 
-version 0.018
+version 0.019
 
 =head1 SYNOPSIS
 
@@ -26,7 +26,7 @@ version 0.018
     openapi => {
       document_uri => 'https://example.com/api/main.json',
       schema => {
-        openapi => '3.1.1',
+        openapi => '3.2.0',
         info => {
           title => 'Test API with raw schema',
           version => '1.2.3',
@@ -163,7 +163,7 @@ consistently across release versions. Values that may be used by controllers and
 
 =item *
 
-C<path_template>: Set by the first call to L</validate_request> or L</validate_response>. A string representing the request URI, with placeholders in braces (e.g. C</pets/{petId}>); see L<https://spec.openapis.org/oas/v3.1.0#paths-object>.
+C<path_template>: Set by the first call to L</validate_request> or L</validate_response>. A string representing the request URI, with placeholders in braces (e.g. C</pets/{petId}>); see L<https://spec.openapis.org/oas/latest#paths-object>.
 
 =item *
 
@@ -216,6 +216,14 @@ L<https://learn.openapis.org/>
 L<https://spec.openapis.org/oas/latest.html>
 
 =back
+
+=head1 GIVING THANKS
+
+=for stopwords MetaCPAN GitHub
+
+If you found this module to be useful, please show your appreciation by
+adding a +1 in L<MetaCPAN|https://metacpan.org/dist/Mojolicious-Plugin-OpenAPI-Modern>
+and a star in L<GitHub|https://github.com/karenetheridge/Mojolicious-Plugin-OpenAPI-Modern>.
 
 =head1 SUPPORT
 
