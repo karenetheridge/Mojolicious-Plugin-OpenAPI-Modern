@@ -231,7 +231,7 @@ YAML
         valid => false,
         errors => [
           {
-            instanceLocation => '/request/body',
+            instanceLocation => '/request/body/content',
             keywordLocation => jsonp(qw(/paths /foo/{foo_id} post requestBody content text/plain schema pattern)),
             absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /foo/{foo_id} post requestBody content text/plain schema pattern))),
             error => 'pattern does not match',
@@ -286,7 +286,7 @@ YAML
       valid => false,
       errors => [
         {
-          instanceLocation => '/response/body',
+          instanceLocation => '/response/body/content',
           keywordLocation => jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)),
           absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /foo/{foo_id} post responses 500 content application/json schema)))->to_string,
           error => 'response body not permitted',
@@ -326,7 +326,7 @@ YAML
       valid => false,
       errors => [
         {
-          instanceLocation => '/response/body',
+          instanceLocation => '/response/body/content',
           keywordLocation => jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)),
           absoluteKeywordLocation => $doc_uri_rel->clone->fragment(jsonp(qw(/paths /skip_validate_request get responses 200 content text/plain schema)))->to_string,
           error => 'response body not permitted',
