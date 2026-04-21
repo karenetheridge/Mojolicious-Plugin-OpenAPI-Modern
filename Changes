@@ -1,5 +1,7 @@
 Revision history for Mojolicious-Plugin-OpenAPI-Modern
 
+{{$NEXT}}
+
 0.021     2026-04-21 16:57:49Z
           - fix a missing prereq declaration
 
