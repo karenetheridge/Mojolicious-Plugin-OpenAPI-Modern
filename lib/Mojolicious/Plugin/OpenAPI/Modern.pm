@@ -19,7 +19,6 @@ use Feature::Compat::Try;
 use YAML::PP;
 use Mojo::File 'path';
 use Mojo::JSON 'decode_json';
-use Safe::Isa;
 use OpenAPI::Modern 0.100;
 use namespace::clean;
 
