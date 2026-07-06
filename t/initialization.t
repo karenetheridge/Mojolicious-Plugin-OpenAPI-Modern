@@ -12,7 +12,7 @@ no if "$]" >= 5.041009, feature => 'smartmatch';
 no feature 'switch';
 use open ':std', ':encoding(UTF-8)'; # force stdin, stdout, stderr into utf8
 use Mojolicious::Plugin::OpenAPI::Modern;
-use Path::Tiny;
+use Mojo::File qw(path tempfile);
 
 use lib 't/lib';
 use Helper;
@@ -40,10 +40,10 @@ subtest 'raw schema' => sub {
 };
 
 subtest 'YAML schema' => sub {
-  my $filename = Path::Tiny->tempfile;
-  $filename->move($filename.'.yaml');
+  my $filename = tempfile;
+  $filename->move_to($filename.'.yaml');
   $filename = path($filename.'.yaml');
-  $filename->spew_raw("openapi: $::OAD_VERSION\n".<<'YAML');
+  $filename->spew("openapi: $::OAD_VERSION\n".<<'YAML');
 info:
   title: Test API with yaml document
   version: 1.2.3
@@ -60,10 +60,10 @@ YAML
 };
 
 subtest 'JSON schema' => sub {
-  my $filename = Path::Tiny->tempfile;
-  $filename->move($filename.'.json');
+  my $filename = tempfile;
+  $filename->move_to($filename.'.json');
   $filename = path($filename.'.json');
-  $filename->spew_raw(<<JSON);
+  $filename->spew(<<JSON);
 {
   "openapi": "$::OAD_VERSION",
   "info": {
