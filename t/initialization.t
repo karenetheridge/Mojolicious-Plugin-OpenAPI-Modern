@@ -35,7 +35,7 @@ subtest 'raw schema' => sub {
     },
   );
 
-  is($t->app->openapi->document_get('/info/title'), 'Test API with raw schema',
+  is($t->app->openapi->entry_document->get('/info/title'), 'Test API with raw schema',
     'access schema through OM object');
 };
 
@@ -55,7 +55,7 @@ YAML
     { openapi => { document_filename => $filename } },
   );
 
-  is($t->app->openapi->document_get('/info/title'), 'Test API with yaml document',
+  is($t->app->openapi->entry_document->get('/info/title'), 'Test API with yaml document',
     'access schema through OM object');
 };
 
@@ -79,7 +79,7 @@ JSON
     { openapi => { document_filename => $filename } },
   );
 
-  is($t->app->openapi->document_get('/info/title'), 'Test API with json document',
+  is($t->app->openapi->entry_document->get('/info/title'), 'Test API with json document',
     'access schema through OM object');
 };
 
@@ -101,7 +101,7 @@ subtest 'override with our own object' => sub {
     { openapi => { openapi_obj => $openapi } },
   );
 
-  is($t->app->openapi->document_get('/info/title'), 'Test API with our own object',
+  is($t->app->openapi->entry_document->get('/info/title'), 'Test API with our own object',
     'plugin uses a pre-constructed OpenAPI::Modern object');
 };
 
