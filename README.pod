@@ -2,13 +2,23 @@
 
 =encoding UTF-8
 
+=head1 SUPPORT
+
+=for stopwords OpenAPI
+
+You can also find me on the L<JSON Schema Slack server|https://json-schema.slack.com> and L<OpenAPI
+Slack server|https://open-api.slack.com>, which are also great resources for finding help.
+
 =head1 NAME
 
 Mojolicious::Plugin::OpenAPI::Modern - Mojolicious plugin providing access to an OpenAPI document and parser
 
 =head1 VERSION
 
-version 0.021
+version 0.022
+
+I use a linearly-increasing version numbering scheme. No meaning should be
+presumed or inferred from the version being less than 1.0.
 
 =head1 SYNOPSIS
 
